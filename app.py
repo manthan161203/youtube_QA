@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import time
 import os
-
+os.environ["HF_TOKEN"] = st.secrets["HF_TOKEN"]
 from youtube_utils import extract_video_id, get_video_details, get_transcript
 from langchain_utils import process_with_langchain
 from content_generators import (

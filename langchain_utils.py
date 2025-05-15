@@ -40,8 +40,11 @@ def process_with_langchain(transcript_text, transcript_segments=None, embed_mode
             return None, None
         embeddings = OpenAIEmbeddings()
     else:  # default to huggingface
-        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    
+        embeddings = HuggingFaceEmbeddings(
+            model_name="sentence-transformers/all-MiniLM-L6-v2",
+            huggingfacehub_api_token=os.environ["HF_TOKEN"]
+        )
+
     # Create vector store
     try:
         vectorstore = FAISS.from_documents(docs, embeddings)
