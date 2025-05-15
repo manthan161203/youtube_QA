@@ -136,13 +136,15 @@ if youtube_url:
         
         with tab1:
             st.text_area("Full Transcript", st.session_state.transcript_text, height=300)
-            st.download_button(
-                label="Download Full Transcript",
-                data=st.session_state.transcript_text,
-                file_name=f"youtube_transcript_{video_id}.txt",
-                mime="text/plain"
-            )
-        
+            if st.session_state.get("transcript_text"):
+                st.download_button(
+                    label="Download Full Transcript",
+                    data=st.session_state.transcript_text,
+                    file_name=f"youtube_transcript_{video_id}.txt",
+                )
+            else:
+                st.warning("Transcript is not available yet. Please extract it first.")
+                    
         with tab2:
             if "transcript_segments" in st.session_state and st.session_state.transcript_segments:
                 df = pd.DataFrame(st.session_state.transcript_segments)
