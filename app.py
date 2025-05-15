@@ -44,7 +44,7 @@ embedding_model = st.sidebar.radio(
 
 llm_model = st.sidebar.selectbox(
     "LLM Model",
-    ["gpt-3.5-turbo", "gpt-4", "gpt-4-turbo"],
+    ["gpt-3.5-turbo", "gpt-4o-mini"],
     index=0,
     help="Model to use for content generation"
 )
@@ -100,7 +100,7 @@ if youtube_url:
             transcript, transcript_segments, transcript_source = get_transcript(video_id, whisper_model_size)
             
             if transcript_source in ["youtube", "whisper"]:
-                # Show transcript source
+                # Show transcript source success message
                 if transcript_source == "youtube":
                     st.success("✅ Transcript obtained from YouTube subtitles")
                 else:
@@ -108,6 +108,10 @@ if youtube_url:
                 
                 # Store transcript text in session state
                 st.session_state.transcript_text = transcript
+                
+                # Show full transcript immediately, above everything else
+                st.markdown("### Transcript Preview")
+                st.text_area("Full Transcript", st.session_state.transcript_text, height=300, key="transcript_tab1")
                 
                 # Process with LangChain
                 with st.spinner("Processing with LangChain..."):
@@ -123,6 +127,7 @@ if youtube_url:
                         st.success("✅ Vector embeddings created successfully")
                     else:
                         st.error("Failed to create vector embeddings")
+
             else:
                 st.error(transcript)
         
@@ -135,7 +140,7 @@ if youtube_url:
         tab1, tab2, tab3 = st.tabs(["Full Transcript", "Segments", "Content Analysis"])
         
         with tab1:
-            st.text_area("Full Transcript", st.session_state.transcript_text, height=300)
+            st.text_area("Full Transcript", st.session_state.transcript_text, height=300, key="transcript_preview")
             if st.session_state.get("transcript_text"):
                 st.download_button(
                     label="Download Full Transcript",

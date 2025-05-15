@@ -189,9 +189,8 @@ def generate_concept_map(docs, video_details=None, llm_model="gpt-3.5-turbo"):
     
     return result.content
 
-def generate_practice_questions(docs, video_details=None):
-    """Generate practice questions from the video content"""
-    llm = get_llm()
+def generate_practice_questions(docs, video_details=None, llm_model="gpt-3.5-turbo"):
+    llm = get_llm(llm_model)
     if not llm:
         return "Please add your OpenAI API key to generate practice questions."
     
